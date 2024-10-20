@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-PDF Query Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles remain unchanged */
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            height: 90vh;
+            max-width: 1000px;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 24px;
+            background-color: #f8f9fa;
+
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .input-section {
+            flex: 2;
+            padding: 24px;
+        }
+
+        .response-section {
+            overflow-y: auto;
+            flex: 1;
+            padding: 24px;
+            background-color: #f8f9fa;
+            border-left: 1px solid #e9ecef;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input[type="text"],
+        textarea {
+            overflow-y: auto;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+
+            align-items: center;
+            margin-bottom: 10px;
+
+        }
+
+        .file-input-button {
+            background: linear-gradient(to right, #4a90e2, #5e5ce6);
+            color: white;
+            padding: 12px 20px;
+            margin-left: 5px;
+
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .file-input-button:hover {
+            background: linear-gradient(to right, #3a7bd5, #4d4caa);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 3px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+
+        .file-list div {
+            margin-bottom: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .response-box {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 8px;
+            border-style: solid;
+            border-color: blue;
+            border: -2px;
+            padding: 10px;
+            max-height: 380px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .response-box h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 16px;
+            overflow-y: auto;
+        }
+
+        .response-content {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            padding: -10px;
+            min-height: 0;
+            overflow-y: auto;/* Ensures text scrolls if it overflows */
+            word-wrap: break-word;/* Ensures long words break and do not overflow */
+            max-height: 100%;/* Restricts the content height */
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+
+        #error {
+            color: #d32f2f;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .response-section {
+                border-left: none;
+                border-top: 1px solid #e9ecef;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .copy-button {
+            position: absolute;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
+        .copy-button:active {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Multi-PDF Query Tool</h1>
+        </header>
+        <div class="content">
+            <section class="input-section">
+                <form id="pdfForm">
+                    <div class="file-input-wrapper">
+                        <label for="pdfFiles">Upload PDFs:</label>
+                        <button type="button" class="file-input-button"
+                            onclick="document.getElementById('pdfFiles').click()">
+                            Choose Files
+                        </button>
+                        <input type="file" id="pdfFiles" class="file-input" accept=".pdf" multiple required>
+                    </div>
+                    <div id="fileList" class="file-list"></div>
+                    <div class="form-group">
+                        <label for="apiKey">Paste your Gemini API key here:</label>
+                        <input type="text" id="apiKey" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="question">Ask a question about the PDFs:</label>
+                        <textarea id="question" rows="4" placeholder="E.g: Summarize the pdf" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button" id="submitBtn">Submit Question</button>
+                </form>
+            </section>
+            <section class="response-section">
+                <div class="response-box">
+                    <h2>Response</h2>
+                    <div id="responseContent" class="response-content">
+                        Your response will appear here.
+                    </div>
+                    <button id="copyButton" class="copy-button">Copy to Clipboard</button>
+                </div>
+            </section>
+        </div>
+        <div id="error"></div>
+    </div>
+
+    <script>
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+        const fileList = document.getElementById('fileList');
+        const pdfFilesInput = document.getElementById('pdfFiles');
+
+        pdfFilesInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            for (let file of pdfFilesInput.files) {
+                const fileDiv = document.createElement('div');
+                fileDiv.textContent = file.name;
+                fileList.appendChild(fileDiv);
+            }
+        }
+
+        async function extractTextFromPDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let text = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + '\n';
+                }
+                return text;
+            } catch (error) {
+                throw new Error(`Failed to extract text from PDF ${file.name}: ${error.message}`);
+            }
+        }
+
+        async function queryGeminiAPI(apiKey, pdfTexts, question) {
+            const API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+            const combinedText = pdfTexts.join('\n\n');
+            const prompt = `Based on the following PDF contents:\n\n${combinedText}\n\nPlease answer this question: "${question}"`;
+
+            try {
+                const response = await fetch(`${API_ENDPOINT}?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error (${response.status}): ${errorData.error.message}`);
+                }
+
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                throw new Error('Failed to query Gemini API: ' + error.message);
+            }
+        }
+
+        document.getElementById('copyButton').addEventListener('click', async function () {
+            const responseContent = document.getElementById('responseContent');
+            const textToCopy = responseContent.textContent;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+
+                // Provide visual feedback
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = 'Copy to Clipboard';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                this.textContent = 'Copy failed';
+                setTimeout(() => {
+                    this.textContent = 'Copy to Clipboard';
+                }, 2000);
+            }
+        });
+
+
+        document.getElementById('pdfForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const pdfFiles = document.getElementById('pdfFiles').files;
+            const apiKey = document.getElementById('apiKey').value;
+            const question = document.getElementById('question').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const responseContent = document.getElementById('responseContent');
+            const errorDiv = document.getElementById('error');
+
+            if (pdfFiles.length === 0 || !apiKey || !question) {
+                errorDiv.textContent = 'Please fill in all fields and upload at least one PDF';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            responseContent.textContent = 'Analyzing PDFs and generating answer...';
+            errorDiv.textContent = '';
+
+            try {
+                document.getElementById('copyButton').textContent = 'Copy to Clipboard';
+                const pdfTexts = await Promise.all(Array.from(pdfFiles).map(extractTextFromPDF));
+                const answer = await queryGeminiAPI(apiKey, pdfTexts, question);
+                responseContent.textContent = answer;
+                errorDiv.textContent = '';
+            } catch (error) {
+                responseContent.textContent = '';
+                errorDiv.textContent = 'Error: ' + error.message;
+                if (error.message.includes('API key not valid')) {
+                    errorDiv.textContent += '\nPlease check your API key and make sure it\'s correct.';
+                } else if (error.message.includes('Failed to extract text from PDF')) {
+                    errorDiv.textContent += '\nPlease make sure you\'ve uploaded valid PDF files.';
+                }
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Question';
+            }
+        });
+    </script>
+</body>
+
+</html>

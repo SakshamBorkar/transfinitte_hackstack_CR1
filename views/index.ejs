@@ -1,0 +1,339 @@
+<%- include('partials/header') %>
+
+  <body class="bg-gray-900 text-white">
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside class="w-64 min-h-screen bg-gray-800 p-4 hidden lg:block">
+        <div class="flex items-center mb-8">
+
+          <div><img src="https://upload.wikimedia.org/wikipedia/hi/9/9b/Croma_%28store%29_logo.gif"
+              class="rounded-full h-20 ml-[3rem]"></div>
+        </div>
+        <div class="mb-4">
+          <input type="text" placeholder="Search for..." class="w-full p-2 rounded bg-gray-700 text-white">
+        </div>
+        <nav>
+          <ul class="space-y-2">
+            <li><a href="#" class="flex items-center py-2 px-4 bg-blue-600 rounded"><span
+                  class="text-pink-500 mr-2">●</span> Dashboard</a></li>
+            <li><a href="/chat" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">★</span> AI Analysis</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">👤</span> Users</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">$</span> Pricing</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">🔗</span> Integrations</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">🔒</span> Authentication</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">⚙</span> Settings</a></li>
+            <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700 rounded"><span
+                  class="text-gray-400 mr-2">📄</span> Template pages</a></li>
+          </ul>
+        </nav>
+
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex-1">
+        <!-- Header -->
+        <header class="bg-gray-800 p-4 flex justify-between items-center">
+          <h1 class="text-2xl font-bold">Business Intelligence Tool</h1>
+
+        </header>
+
+        <!-- Dashboard content -->
+        <div class="p-4">
+          <!-- Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-pink-500">♥</span>
+                <span>Save Products</span>
+                <button>⋮</button>
+              </div>
+              <div class="text-3xl font-bold" id="saveProducts">50.8K</div>
+              <div class="text-green-500">28.4% ↑</div>
+
+            </div>
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-500">🛍</span>
+                <span>Stock Products</span>
+                <button>⋮</button>
+              </div>
+              <div class="text-3xl font-bold" id="stockProducts">23.6K</div>
+              <div class="text-red-500">12.6% ↓</div>
+
+            </div>
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-blue-500">🛒</span>
+                <span>Sale Products</span>
+                <button>⋮</button>
+              </div>
+              <div class="text-3xl font-bold" id="saleProducts">756</div>
+              <div class="text-green-500">3.1% ↑</div>
+            </div>
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-green-500">$</span>
+                <span>Average Revenue</span>
+                <button>⋮</button>
+              </div>
+              <div class="text-3xl font-bold" id="averageRevenue">2.3K</div>
+              <div class="text-green-500">11.3% ↑</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Revenue by customer type</h2>
+                <div class="flex items-center">
+                  <span class="mr-2">2023-2024</span>
+                  <button class="px-2 py-1 bg-gray-700 rounded">📅</button>
+                </div>
+              </div>
+              <div class="text-3xl font-bold mb-4" id="totalRevenue">$240.8K</div>
+              <div class="text-green-500 mb-4">14.8% ↑</div>
+              <canvas id="ebitdachart"></canvas>
+
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Revenue by customer type</h2>
+                <div class="flex items-center">
+                  <span class="mr-2">2023-2024</span>
+                  <button class="px-2 py-1 bg-gray-700 rounded">📅</button>
+                </div>
+              </div>
+              <div class="text-3xl font-bold mb-4" id="totalRevenue">$240.8K</div>
+              <div class="text-green-500 mb-4">14.8% ↑</div>
+              <canvas id="networth"></canvas>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Revenue by customer type</h2>
+                <div class="flex items-center">
+                  <span class="mr-2">2023-2024</span>
+                  <button class="px-2 py-1 bg-gray-700 rounded">📅</button>
+                </div>
+              </div>
+              <div class="text-3xl font-bold mb-4" id="totalRevenue">$240.8K</div>
+              <div class="text-green-500 mb-4">14.8% ↑</div>
+              <canvas id="receivables"></canvas>
+
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Revenue by customer type</h2>
+                <div class="flex items-center">
+                  <span class="mr-2">2023-2024</span>
+                  <button class="px-2 py-1 bg-gray-700 rounded">📅</button>
+                </div>
+              </div>
+              <div class="text-3xl font-bold mb-4" id="totalRevenue">$240.8K</div>
+              <div class="text-green-500 mb-4">14.8% ↑</div>
+              <canvas id="assets"></canvas>
+
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+
+      // Select the canvas element to render the chart
+      const ebitda = document.getElementById('ebitdachart').getContext('2d');
+
+      // Define the data for the bar chart
+      const data1 = {
+        labels: ['Croma', 'Reliance Digital', 'Aditya_Vision', 'Bajaj', 'Poojara', 'Vijay Sales'],
+        datasets: [{
+          label: 'EBITDA in %',
+          data: [7.09, 16.37, 60.10, 57.41, 60.10, 60.10],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Configure the chart options
+      const config1 = {
+        type: 'bar',
+        data: data1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      // Create the bar chart
+      new Chart(ebitda, config1);
+
+      // Select the canvas element to render the chart
+      const networth = document.getElementById('networth').getContext('2d');
+
+      // Define the data for the bar chart
+      const data2 = {
+        labels: ['Croma', 'Reliance Digital', 'Aditya_Vision', 'Bajaj', 'Poojara', 'Vijay Sales'],
+        datasets: [{
+          label: 'Change in Networth',
+          data: [1.29, -0.28, 73.19, 9.89, 14.27, 70.39],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Configure the chart options
+      const config2 = {
+        type: 'bar',
+        data: data2,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      // Create the bar chart
+      new Chart(networth, config2);
+
+      // Select the canvas element to render the chart
+      const receivables = document.getElementById('receivables').getContext('2d');
+
+      // Define the data for the bar chart
+      const data3 = {
+        labels: ['Croma', 'Reliance Digital', 'Aditya_Vision', 'Bajaj', 'Poojara', 'Vijay Sales'],
+        datasets: [{
+          label: ' %Trade receivables',
+          data: [-79.32, 25, -62.25, 15.88, 15, 29.99],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Configure the chart options
+      const config3 = {
+        type: 'bar',
+        data: data3,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      // Create the bar chart
+      new Chart(receivables, config3);
+
+
+
+      // Select the canvas element to render the chart
+      const assets = document.getElementById('assets').getContext('2d');
+
+      // Define the data for the bar chart
+      const data4 = {
+        labels: ['Croma', 'Reliance Digital', 'Aditya_Vision', 'Bajaj', 'Poojara', 'Vijay Sales'],
+        datasets: [{
+          label: ' %Current assests',
+          data: [-34.99, -0.61, 31.73, 34.46, 25, 11.83],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Configure the chart options
+      const config4 = {
+        type: 'bar',
+        data: data4,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      // Create the bar chart
+      new Chart(assets, config4);
+
+
+
+    </script>
+    <%- include('partials/footer') %>
