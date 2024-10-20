@@ -53,12 +53,11 @@ Copy code
     python scrape.py
 
 2. Clean and process the data:
-bash
-Copy code
-python process_data.py
+    ```bash
+      python process_data.py
+
 Generate insights through the dashboard:
-bash
-Copy code
+
 python dashboard.py
 Query insights using the chatbot:
 bash
