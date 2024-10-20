@@ -31,3 +31,38 @@ This project focuses on building a Generative AI-powered competitive intelligenc
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-repo/competitive-intelligence-solution.git
+
+
+Here’s a separate README file with the installation, usage, data sources, and future enhancements clearly outlined.
+
+markdown
+Copy code
+# Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/competitive-intelligence-solution.git
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+3. Set up environment variables for API integrations (e.g., web scraping services, financial analysis tools).
+
+# Usage
+1. Run the web scraping script to collect the data:
+   ```bash
+    python scrape.py
+
+2. Clean and process the data:
+bash
+Copy code
+python process_data.py
+Generate insights through the dashboard:
+bash
+Copy code
+python dashboard.py
+Query insights using the chatbot:
+bash
+Copy code
+python chatbot.py
+Data Sources
+Retailers: Croma, Reliance Digital, Vijay Sales, Aditya Vision, Poojara
